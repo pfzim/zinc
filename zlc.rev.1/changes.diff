@@ -1,0 +1,30 @@
+--- zl_parser0.cpp	Wed Jun 11 12:57:00 2008
++++ zl_parser.cpp	Wed Oct 15 15:36:05 2008
+@@ -2950,11 +2950,11 @@
+ 				yyval.size = var_size;
+ 
+ 				cl_push(pp, OP_POP_REG); cl_push(pp, REG_ECX);
+ 				cl_push(pp, OP_POP_REG); cl_push(pp, REG_EAX);
+ 				cl_push(pp, OP_MOV_REG_PREG); cl_push(pp, REG_EAX); cl_push(pp, REG_EAX);
+-				cl_push(pp, OP_MOV_REG_IMM); cl_push(pp, REG_EBX); cl_push_dw(pp, 4);
++				cl_push(pp, OP_MOV_REG_IMM); cl_push(pp, REG_EBX); cl_push_dw(pp, var_size);
+ 				cl_push(pp, OP_MUL_REG_REG); cl_push(pp, REG_ECX); cl_push(pp, REG_EBX);
+ 				cl_push(pp, OP_ADD_REG_REG); cl_push(pp, REG_EAX); cl_push(pp, REG_ECX);
+ 				cl_push(pp, OP_PUSH_REG); cl_push(pp, REG_EAX);
+ 			}
+ 			else
+--- zl_parser0.y	Wed Jun 11 12:56:54 2008
++++ zl_parser.y	Wed Oct 15 15:35:56 2008
+@@ -1432,11 +1432,11 @@
+ 				$$.size = var_size;
+ 
+ 				cl_push(pp, OP_POP_REG); cl_push(pp, REG_ECX);
+ 				cl_push(pp, OP_POP_REG); cl_push(pp, REG_EAX);
+ 				cl_push(pp, OP_MOV_REG_PREG); cl_push(pp, REG_EAX); cl_push(pp, REG_EAX);
+-				cl_push(pp, OP_MOV_REG_IMM); cl_push(pp, REG_EBX); cl_push_dw(pp, 4);
++				cl_push(pp, OP_MOV_REG_IMM); cl_push(pp, REG_EBX); cl_push_dw(pp, var_size);
+ 				cl_push(pp, OP_MUL_REG_REG); cl_push(pp, REG_ECX); cl_push(pp, REG_EBX);
+ 				cl_push(pp, OP_ADD_REG_REG); cl_push(pp, REG_EAX); cl_push(pp, REG_ECX);
+ 				cl_push(pp, OP_PUSH_REG); cl_push(pp, REG_EAX);
+ 			}
+ 			else

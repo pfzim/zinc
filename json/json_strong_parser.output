@@ -1,0 +1,485 @@
+Grammar
+
+    0 $accept: json_data $end
+
+    1 json_data: object
+    2          | /* empty */
+
+    3 object: '{' '}'
+    4       | '{' members '}'
+
+    5 members: pair
+    6        | pair ',' members
+
+    7 pair: label ':' svalue
+
+    8 array: '[' ']'
+    9      | '[' elements ']'
+
+   10 elements: svalue
+   11         | elements ',' svalue
+
+   12 svalue: type '=' value
+   13       | object
+   14       | array
+
+   15 type: T_LABEL
+
+   16 value: T_CONST_STRING
+   17      | T_CONST_LONG
+   18      | T_CONST_ULONG
+   19      | T_CONST_DOUBLE
+   20      | T_TRUE
+   21      | T_FALSE
+   22      | T_NULL
+
+   23 label: T_CONST_STRING
+   24      | T_LABEL
+   25      | T_CONST_ULONG
+   26      | T_TRUE
+   27      | T_FALSE
+   28      | T_NULL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+',' (44) 6 11
+':' (58) 7
+'=' (61) 12
+'[' (91) 8 9
+']' (93) 8 9
+'{' (123) 3 4
+'}' (125) 3 4
+error (256)
+T_LABEL (258) 15 24
+T_CONST_DOUBLE (259) 19
+T_CONST_LONG (260) 17
+T_CONST_ULONG (261) 18 25
+T_CONST_STRING (262) 16 23
+T_TRUE (263) 20 26
+T_FALSE (264) 21 27
+T_NULL (265) 22 28
+
+
+Nonterminals, with rules where they appear
+
+$accept (18)
+    on left: 0
+json_data (19)
+    on left: 1 2, on right: 0
+object (20)
+    on left: 3 4, on right: 1 13
+members (21)
+    on left: 5 6, on right: 4 6
+pair (22)
+    on left: 7, on right: 5 6
+array (23)
+    on left: 8 9, on right: 14
+elements (24)
+    on left: 10 11, on right: 9 11
+svalue (25)
+    on left: 12 13 14, on right: 7 10 11
+type (26)
+    on left: 15, on right: 12
+value (27)
+    on left: 16 17 18 19 20 21 22, on right: 12
+label (28)
+    on left: 23 24 25 26 27 28, on right: 7
+
+
+State 0
+
+    0 $accept: . json_data $end
+    1 json_data: . object
+    2          | .  [$end]
+    3 object: . '{' '}'
+    4       | . '{' members '}'
+
+    '{'  shift, and go to state 1
+
+    $default  reduce using rule 2 (json_data)
+
+    json_data  go to state 2
+    object     go to state 3
+
+
+State 1
+
+    3 object: '{' . '}'
+    4       | '{' . members '}'
+    5 members: . pair
+    6        | . pair ',' members
+    7 pair: . label ':' svalue
+   23 label: . T_CONST_STRING
+   24      | . T_LABEL
+   25      | . T_CONST_ULONG
+   26      | . T_TRUE
+   27      | . T_FALSE
+   28      | . T_NULL
+
+    T_LABEL         shift, and go to state 4
+    T_CONST_ULONG   shift, and go to state 5
+    T_CONST_STRING  shift, and go to state 6
+    T_TRUE          shift, and go to state 7
+    T_FALSE         shift, and go to state 8
+    T_NULL          shift, and go to state 9
+    '}'             shift, and go to state 10
+
+    members  go to state 11
+    pair     go to state 12
+    label    go to state 13
+
+
+State 2
+
+    0 $accept: json_data . $end
+
+    $end  shift, and go to state 14
+
+
+State 3
+
+    1 json_data: object .
+
+    $default  reduce using rule 1 (json_data)
+
+
+State 4
+
+   24 label: T_LABEL .
+
+    $default  reduce using rule 24 (label)
+
+
+State 5
+
+   25 label: T_CONST_ULONG .
+
+    $default  reduce using rule 25 (label)
+
+
+State 6
+
+   23 label: T_CONST_STRING .
+
+    $default  reduce using rule 23 (label)
+
+
+State 7
+
+   26 label: T_TRUE .
+
+    $default  reduce using rule 26 (label)
+
+
+State 8
+
+   27 label: T_FALSE .
+
+    $default  reduce using rule 27 (label)
+
+
+State 9
+
+   28 label: T_NULL .
+
+    $default  reduce using rule 28 (label)
+
+
+State 10
+
+    3 object: '{' '}' .
+
+    $default  reduce using rule 3 (object)
+
+
+State 11
+
+    4 object: '{' members . '}'
+
+    '}'  shift, and go to state 15
+
+
+State 12
+
+    5 members: pair .  ['}']
+    6        | pair . ',' members
+
+    ','  shift, and go to state 16
+
+    $default  reduce using rule 5 (members)
+
+
+State 13
+
+    7 pair: label . ':' svalue
+
+    ':'  shift, and go to state 17
+
+
+State 14
+
+    0 $accept: json_data $end .
+
+    $default  accept
+
+
+State 15
+
+    4 object: '{' members '}' .
+
+    $default  reduce using rule 4 (object)
+
+
+State 16
+
+    5 members: . pair
+    6        | . pair ',' members
+    6        | pair ',' . members
+    7 pair: . label ':' svalue
+   23 label: . T_CONST_STRING
+   24      | . T_LABEL
+   25      | . T_CONST_ULONG
+   26      | . T_TRUE
+   27      | . T_FALSE
+   28      | . T_NULL
+
+    T_LABEL         shift, and go to state 4
+    T_CONST_ULONG   shift, and go to state 5
+    T_CONST_STRING  shift, and go to state 6
+    T_TRUE          shift, and go to state 7
+    T_FALSE         shift, and go to state 8
+    T_NULL          shift, and go to state 9
+
+    members  go to state 18
+    pair     go to state 12
+    label    go to state 13
+
+
+State 17
+
+    3 object: . '{' '}'
+    4       | . '{' members '}'
+    7 pair: label ':' . svalue
+    8 array: . '[' ']'
+    9      | . '[' elements ']'
+   12 svalue: . type '=' value
+   13       | . object
+   14       | . array
+   15 type: . T_LABEL
+
+    T_LABEL  shift, and go to state 19
+    '{'      shift, and go to state 1
+    '['      shift, and go to state 20
+
+    object  go to state 21
+    array   go to state 22
+    svalue  go to state 23
+    type    go to state 24
+
+
+State 18
+
+    6 members: pair ',' members .
+
+    $default  reduce using rule 6 (members)
+
+
+State 19
+
+   15 type: T_LABEL .
+
+    $default  reduce using rule 15 (type)
+
+
+State 20
+
+    3 object: . '{' '}'
+    4       | . '{' members '}'
+    8 array: . '[' ']'
+    8      | '[' . ']'
+    9      | . '[' elements ']'
+    9      | '[' . elements ']'
+   10 elements: . svalue
+   11         | . elements ',' svalue
+   12 svalue: . type '=' value
+   13       | . object
+   14       | . array
+   15 type: . T_LABEL
+
+    T_LABEL  shift, and go to state 19
+    '{'      shift, and go to state 1
+    '['      shift, and go to state 20
+    ']'      shift, and go to state 25
+
+    object    go to state 21
+    array     go to state 22
+    elements  go to state 26
+    svalue    go to state 27
+    type      go to state 24
+
+
+State 21
+
+   13 svalue: object .
+
+    $default  reduce using rule 13 (svalue)
+
+
+State 22
+
+   14 svalue: array .
+
+    $default  reduce using rule 14 (svalue)
+
+
+State 23
+
+    7 pair: label ':' svalue .
+
+    $default  reduce using rule 7 (pair)
+
+
+State 24
+
+   12 svalue: type . '=' value
+
+    '='  shift, and go to state 28
+
+
+State 25
+
+    8 array: '[' ']' .
+
+    $default  reduce using rule 8 (array)
+
+
+State 26
+
+    9 array: '[' elements . ']'
+   11 elements: elements . ',' svalue
+
+    ','  shift, and go to state 29
+    ']'  shift, and go to state 30
+
+
+State 27
+
+   10 elements: svalue .
+
+    $default  reduce using rule 10 (elements)
+
+
+State 28
+
+   12 svalue: type '=' . value
+   16 value: . T_CONST_STRING
+   17      | . T_CONST_LONG
+   18      | . T_CONST_ULONG
+   19      | . T_CONST_DOUBLE
+   20      | . T_TRUE
+   21      | . T_FALSE
+   22      | . T_NULL
+
+    T_CONST_DOUBLE  shift, and go to state 31
+    T_CONST_LONG    shift, and go to state 32
+    T_CONST_ULONG   shift, and go to state 33
+    T_CONST_STRING  shift, and go to state 34
+    T_TRUE          shift, and go to state 35
+    T_FALSE         shift, and go to state 36
+    T_NULL          shift, and go to state 37
+
+    value  go to state 38
+
+
+State 29
+
+    3 object: . '{' '}'
+    4       | . '{' members '}'
+    8 array: . '[' ']'
+    9      | . '[' elements ']'
+   11 elements: elements ',' . svalue
+   12 svalue: . type '=' value
+   13       | . object
+   14       | . array
+   15 type: . T_LABEL
+
+    T_LABEL  shift, and go to state 19
+    '{'      shift, and go to state 1
+    '['      shift, and go to state 20
+
+    object  go to state 21
+    array   go to state 22
+    svalue  go to state 39
+    type    go to state 24
+
+
+State 30
+
+    9 array: '[' elements ']' .
+
+    $default  reduce using rule 9 (array)
+
+
+State 31
+
+   19 value: T_CONST_DOUBLE .
+
+    $default  reduce using rule 19 (value)
+
+
+State 32
+
+   17 value: T_CONST_LONG .
+
+    $default  reduce using rule 17 (value)
+
+
+State 33
+
+   18 value: T_CONST_ULONG .
+
+    $default  reduce using rule 18 (value)
+
+
+State 34
+
+   16 value: T_CONST_STRING .
+
+    $default  reduce using rule 16 (value)
+
+
+State 35
+
+   20 value: T_TRUE .
+
+    $default  reduce using rule 20 (value)
+
+
+State 36
+
+   21 value: T_FALSE .
+
+    $default  reduce using rule 21 (value)
+
+
+State 37
+
+   22 value: T_NULL .
+
+    $default  reduce using rule 22 (value)
+
+
+State 38
+
+   12 svalue: type '=' value .
+
+    $default  reduce using rule 12 (svalue)
+
+
+State 39
+
+   11 elements: elements ',' svalue .
+
+    $default  reduce using rule 11 (elements)
